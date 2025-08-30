@@ -1,5 +1,6 @@
 package com.example.demo.controller;
 
+import com.example.demo.dto.UserResponseDTO;
 import com.example.demo.model.User;
 import com.example.demo.service.AuthService;
 import jakarta.servlet.http.HttpServletRequest;
@@ -7,7 +8,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.UUID;
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/auth")
@@ -20,18 +21,15 @@ public class AuthController {
     }
 
     @PostMapping("/login")
-    public User login(HttpServletRequest request, @RequestBody User user) {
-        String clientIp = request.getRemoteAddr();
-        String method = request.getMethod();
+    public UserResponseDTO login(@RequestBody User user, HttpServletRequest request) {
+        List<String> errors = authService.validateUser(user);
+        if (!errors.isEmpty()) throw new RuntimeException("VALIDATION_ERROR: " + errors.toString());
+        return authService.login(request, user);
+    }
 
-        logger.info("client ip: {}", clientIp);
-        logger.info("request method: {}", method);
-        logger.info("Username: {}",user.getUsername());
-        logger.info("Username: {}",user.getPassword());
-
-        user.setId(UUID.randomUUID());
-        logger.info("Username: {}",user.getId());
-        return this.authService.login(user);
+    @PostMapping("/signup")
+    public UserResponseDTO signup(@RequestBody User user) {
+        return authService.signupUser(user);
     }
 
 }
