@@ -5,6 +5,7 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 
+import java.time.Instant;
 import java.util.UUID;
 
 @Getter
@@ -16,14 +17,18 @@ public class UserResponseDTO {
     private String lastName;
     private String fullName;
     private String email;
+    private Instant createdAt;
+    private Instant updatedAt;
     private UUID id;
 
-    public UserResponseDTO(String username, String firstName, String lastName, String fullName, String email, UUID id) {
+    public UserResponseDTO(UUID id, String username, String firstName, String lastName, String fullName, String email, Instant createdAt, Instant updatedAt) {
         this.username = username;
         this.firstName = firstName;
         this.lastName = lastName;
         this.fullName = fullName;
         this.email = email;
+        this.createdAt = createdAt;
+        this.updatedAt = updatedAt;
         this.id = id;
     }
 
@@ -35,5 +40,7 @@ public class UserResponseDTO {
         this.fullName = user.getFullName();
         this.email = user.getEmail();
         this.id = user.getId();
+        this.createdAt = user.getCreatedAt();
+        this.updatedAt = user.getUpdatedAt();
     }
 }

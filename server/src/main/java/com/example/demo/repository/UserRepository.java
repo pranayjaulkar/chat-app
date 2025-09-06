@@ -15,16 +15,9 @@ public interface UserRepository extends JpaRepository<User, UUID> {
 
     Boolean existsByUsername(String username);
 
-    //    @Query("SELECT u FROM User u WHERE u.email = :email OR u.username = :username")
     Boolean existsByUsernameOrEmail(String username, String email);
 
-    @Query("SELECT new com.example.demo.dto.UserResponseDTO(" +
-            "u.username, " +
-            "u.firstName, " +
-            "u.lastName, " +
-            "u.fullName, " +
-            "u.email, " +
-            "u.id) " +
-            "FROM User u WHERE u.username = :username")
+
+    @Query("SELECT new com.example.demo.dto.UserResponseDTO(u) FROM User u WHERE u.username = :username")
     UserResponseDTO findUserByUsername(@Param("username") String username);
 }

@@ -23,7 +23,6 @@ public class UserController {
 
     @GetMapping
     public UserResponseDTO getUser(@AuthenticationPrincipal UserDetails userDetails) {
-        User user = userRepository.findByUsername(userDetails.getUsername());
-        return new UserResponseDTO(user);
+        return userRepository.findUserByUsername(userDetails.getUsername());
     }
 }

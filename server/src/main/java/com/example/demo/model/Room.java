@@ -1,7 +1,6 @@
 package com.example.demo.model;
 
 import jakarta.persistence.*;
-import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.Setter;
@@ -10,46 +9,35 @@ import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
-
 import java.time.Instant;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.UUID;
 
+
 @Entity
 @EntityListeners(AuditingEntityListener.class)
-@Table(name = "users")
+@Table(name = "rooms")
 @Getter
 @Setter
 @ToString
-public class User {
+public class Room {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     @Column(updatable = false, nullable = false)
     private UUID id;
 
-    @NotNull
-    @Column(nullable = false, unique = true)
-    private String username;
-
-    @Column(nullable = false, unique = true)
-    @Email
-    @NotNull
-    private String email;
-
-    @NotNull
-    @Column(nullable = false)
-    private String firstName;
-
-    @NotNull
-    @Column(nullable = false)
-    private String lastName;
-
     @Column
-    private String fullName;
+    private String name;
 
+    @NotNull
+    @Enumerated(EnumType.STRING)
     @Column(nullable = false)
-    private String password;
+    private RoomType type = RoomType.DIRECT;
+
+    @NotNull
+    @Column(nullable = false, updatable = false)
+    private UUID createdBy;
 
     @CreatedDate
     @Column(nullable = false, updatable = false)
@@ -59,9 +47,6 @@ public class User {
     @Column(nullable = false)
     private Instant updatedAt;
 
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "room", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<RoomParticipant> participants = new HashSet<>();
-
-    @OneToMany(mappedBy = "sender", cascade = CascadeType.ALL, orphanRemoval = true)
-    private Set<Message> messages = new HashSet<>();
 }
