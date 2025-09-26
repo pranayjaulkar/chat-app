@@ -3,7 +3,7 @@ import { api } from "./axiosInstance";
 
 export const getUser = async () => {
   try {
-    const res = await api.get("/users");
+    const res = await api.get("/users/me");
     return res.data;
   } catch (error) {
     throw error;

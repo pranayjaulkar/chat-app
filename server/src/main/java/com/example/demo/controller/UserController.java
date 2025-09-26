@@ -21,7 +21,7 @@ public class UserController {
         this.userRepository = userRepository;
     }
 
-    @GetMapping
+    @GetMapping("/me")
     public UserResponseDTO getUser(@AuthenticationPrincipal UserDetails userDetails) {
         return userRepository.findUserByUsername(userDetails.getUsername());
     }

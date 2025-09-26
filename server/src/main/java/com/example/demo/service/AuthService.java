@@ -22,7 +22,6 @@ import java.util.List;
 @Service
 public class AuthService {
     private final UserRepository userRepository;
-    private static final Logger logger = LoggerFactory.getLogger(AuthService.class);
     private final AuthenticationManager authenticationManager;
     private final PasswordEncoder passwordEncoder;
     private final UserService userService;
@@ -38,7 +37,6 @@ public class AuthService {
         Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(userData.getUsername(), userData.getPassword()));
         SecurityContextHolder.getContext().setAuthentication(authentication);
         HttpSession session = request.getSession(true);
-        logger.info(session.getId());
         session.setAttribute(
                 HttpSessionSecurityContextRepository.SPRING_SECURITY_CONTEXT_KEY,
                 SecurityContextHolder.getContext()
