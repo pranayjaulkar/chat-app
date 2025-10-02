@@ -1,6 +1,6 @@
 package com.example.demo.controller;
 
-import com.example.demo.dto.UserResponseDTO;
+import com.example.demo.dto.UserResponse;
 import com.example.demo.model.User;
 import com.example.demo.service.AuthService;
 import jakarta.servlet.http.HttpServletRequest;
@@ -21,14 +21,14 @@ public class AuthController {
     }
 
     @PostMapping("/login")
-    public UserResponseDTO login(@RequestBody User user, HttpServletRequest request) {
+    public UserResponse login(@RequestBody User user, HttpServletRequest request) {
         List<String> errors = authService.validateUser(user);
         if (!errors.isEmpty()) throw new RuntimeException("VALIDATION_ERROR: " + errors.toString());
         return authService.login(request, user);
     }
 
     @PostMapping("/signup")
-    public UserResponseDTO signup(@RequestBody User user) {
+    public UserResponse signup(@RequestBody User user) {
         return authService.signupUser(user);
     }
 

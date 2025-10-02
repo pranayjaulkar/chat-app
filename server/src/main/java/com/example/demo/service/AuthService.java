@@ -1,13 +1,11 @@
 package com.example.demo.service;
 
-import com.example.demo.dto.UserResponseDTO;
+import com.example.demo.dto.UserResponse;
 import com.example.demo.exception.ApiException;
 import com.example.demo.model.User;
 import com.example.demo.repository.UserRepository;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -33,7 +31,7 @@ public class AuthService {
         this.userService = userService;
     }
 
-    public UserResponseDTO login(HttpServletRequest request, User userData) {
+    public UserResponse login(HttpServletRequest request, User userData) {
         Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(userData.getUsername(), userData.getPassword()));
         SecurityContextHolder.getContext().setAuthentication(authentication);
         HttpSession session = request.getSession(true);
@@ -44,7 +42,7 @@ public class AuthService {
         return userRepository.findUserByUsername(userData.getUsername());
     }
 
-    public UserResponseDTO signupUser(User user) {
+    public UserResponse signupUser(User user) {
         Boolean userExists = userRepository.existsByUsernameOrEmail(user.getUsername(), user.getEmail());
 
         if (!userExists) {
@@ -61,7 +59,7 @@ public class AuthService {
 
             User savedUser = userRepository.save(user);
 
-            return new UserResponseDTO(savedUser);
+            return new UserResponse(savedUser);
         } else {
             throw new ApiException("USER_ALREADY_EXISTS", "User already exists with given email or username");
         }

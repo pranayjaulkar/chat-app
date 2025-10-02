@@ -1,5 +1,7 @@
 package com.example.demo.controller;
 
+import com.example.demo.dto.CreateRoomData;
+import com.example.demo.dto.CreateRoomResponse;
 import com.example.demo.model.Room;
 import com.example.demo.service.CustomUserDetails;
 import com.example.demo.service.RoomService;
@@ -32,8 +34,7 @@ public class RoomController {
     }
 
     @PostMapping
-    public Room createRoom(@RequestBody Room room, @AuthenticationPrincipal CustomUserDetails userDetails) {
-        logger.info(room.toString());
+    public CreateRoomResponse createRoom(@RequestBody CreateRoomData room, @AuthenticationPrincipal CustomUserDetails userDetails) {
         return roomService.createRoom(room, userDetails.getUserId());
     }
 }

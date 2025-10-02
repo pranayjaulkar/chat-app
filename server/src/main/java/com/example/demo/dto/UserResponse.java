@@ -11,7 +11,7 @@ import java.util.UUID;
 @Getter
 @Setter
 @ToString
-public class UserResponseDTO {
+public class UserResponse {
     private String username;
     private String firstName;
     private String lastName;
@@ -21,19 +21,7 @@ public class UserResponseDTO {
     private Instant updatedAt;
     private UUID id;
 
-    public UserResponseDTO(UUID id, String username, String firstName, String lastName, String fullName, String email, Instant createdAt, Instant updatedAt) {
-        this.username = username;
-        this.firstName = firstName;
-        this.lastName = lastName;
-        this.fullName = fullName;
-        this.email = email;
-        this.createdAt = createdAt;
-        this.updatedAt = updatedAt;
-        this.id = id;
-    }
-
-
-    public UserResponseDTO(User user) {
+    public UserResponse(User user) {
         this.username = user.getUsername();
         this.firstName = user.getFirstName();
         this.lastName = user.getLastName();

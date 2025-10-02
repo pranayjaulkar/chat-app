@@ -13,6 +13,9 @@ import java.util.UUID;
 
 @Repository
 public interface RoomRepository extends JpaRepository<Room, UUID> {
-    @Query("SELECT r FROM RoomParticipant rp JOIN rp.room r WHERE rp.user = :user")
-    Page<Room> findRoomsByUser(@Param("user") User user, Pageable pageable);
+        @Query("SELECT r FROM RoomParticipant rp JOIN rp.room r WHERE rp.user = :user")
+        Page<Room> findRoomsByUser(@Param("user") User user, Pageable pageable);
+//    @Query("SELECT r FROM RoomParticipant rp JOIN rp.room r WHERE rp.user.id = :userId")
+//    Page<Room> findRoomsByUser(@Param("userId") UUID userId, Pageable pageable);
+
 }

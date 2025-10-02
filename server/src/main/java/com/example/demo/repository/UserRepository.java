@@ -1,6 +1,6 @@
 package com.example.demo.repository;
 
-import com.example.demo.dto.UserResponseDTO;
+import com.example.demo.dto.UserResponse;
 import com.example.demo.model.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -13,11 +13,10 @@ import java.util.UUID;
 public interface UserRepository extends JpaRepository<User, UUID> {
     User findByUsername(String username);
 
-    Boolean existsByUsername(String username);
 
     Boolean existsByUsernameOrEmail(String username, String email);
 
 
-    @Query("SELECT new com.example.demo.dto.UserResponseDTO(u) FROM User u WHERE u.username = :username")
-    UserResponseDTO findUserByUsername(@Param("username") String username);
+    @Query("SELECT new com.example.demo.dto.UserResponse(u) FROM User u WHERE u.username = :username")
+    UserResponse findUserByUsername(@Param("username") String username);
 }
