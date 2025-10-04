@@ -8,6 +8,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.UUID;
+
 @RestController
 @RequestMapping("/api/rooms/{roomId}/messages")
 public class MessageController {
@@ -17,6 +19,7 @@ public class MessageController {
         this.messageService = messageService;
     }
 
+    // get message of a room
     @GetMapping
     public Page<Message> getMessages(@RequestParam Integer page, @RequestParam Integer pageSize) {
         Pageable pageable = PageRequest.of(page, pageSize, Sort.by("createdAt").descending());

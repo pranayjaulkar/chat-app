@@ -16,7 +16,7 @@ import java.util.UUID;
 @Getter
 @Setter
 @ToString
-public class CreateRoomResponse {
+public class RoomResponse {
     private UUID id;
     private String name;
     private RoomType type;
@@ -25,7 +25,7 @@ public class CreateRoomResponse {
     private Instant updatedAt;
     private Set<UserResponse> participants;
 
-    public CreateRoomResponse(Room room) {
+    public RoomResponse(Room room) {
         this.id = room.getId();
         this.name = room.getName();
         this.type = room.getType();

@@ -14,13 +14,14 @@ import java.util.UUID;
 @Getter
 @Setter
 @ToString
-public class CreateRoomData implements RoomData {
+public class UpdateRoomData implements RoomData {
+    private UUID id;
     private String name;
     private RoomType type;
     private Set<UUID> participants;
 
     @Override
     public Optional<UUID> getId() {
-        return Optional.empty();
+        return Optional.ofNullable(id);
     }
 }

@@ -1,7 +1,9 @@
 package com.example.demo.service;
 
+import com.example.demo.common.RoomData;
 import com.example.demo.dto.CreateRoomData;
-import com.example.demo.dto.CreateRoomResponse;
+import com.example.demo.dto.RoomResponse;
+import com.example.demo.dto.UpdateRoomData;
 import com.example.demo.exception.ApiException;
 import com.example.demo.model.Room;
 import com.example.demo.model.RoomParticipant;
@@ -9,7 +11,6 @@ import com.example.demo.model.RoomType;
 import com.example.demo.model.User;
 import com.example.demo.repository.RoomRepository;
 import com.example.demo.repository.UserRepository;
-import lombok.ToString;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
@@ -29,12 +30,16 @@ public class RoomService {
         this.userRepository = userRepository;
     }
 
-    public List<String> validateRoom(CreateRoomData room) {
+    public List<String> validateRoom(RoomData room) {
         List<String> errors = new ArrayList<>();
 
         if (room == null) {
             errors.add("room data is required");
             return errors;
+        }
+
+        if (room instanceof UpdateRoomData && room.getId().isEmpty()) {
+            errors.add("'id' is required");
         }
 
         if (room.getName() == null || room.getName().isBlank()) errors.add("'name' is required");
@@ -53,8 +58,8 @@ public class RoomService {
         return roomRepository.findRoomsByUser(user, pageable);
     }
 
-    public CreateRoomResponse createRoom(CreateRoomData roomData, UUID userId) {
-        List<String> errors = this.validateRoom(roomData);
+    public RoomResponse createRoom(CreateRoomData roomData, UUID userId) {
+        List<String> errors = validateRoom(roomData);
         if (!errors.isEmpty()) throw new ApiException("ROOM_VALIDATION_ERROR", errors.toString());
         Room room = new Room();
         room.setName(roomData.getName());
@@ -73,7 +78,34 @@ public class RoomService {
 
         room.setParticipants(participants);
 
-        return new CreateRoomResponse(roomRepository.save(room));
+        return new RoomResponse(roomRepository.save(room));
     }
+
+    public RoomResponse updateRoom(UpdateRoomData roomData, UUID roomId) {
+        if (roomData.getId().isEmpty()) roomData.setId(roomId);
+
+        List<String> errors = validateRoom(roomData);
+        if (!errors.isEmpty()) throw new ApiException("ROOM_VALIDATION_ERROR", errors.toString());
+
+        Room room = roomRepository.findById(roomId)
+                .orElseThrow(() -> new ApiException("ROOM_NOT_FOUND", "Room not found with ID: " + roomId));
+
+        room.setName(roomData.getName());
+        room.setType(roomData.getType());
+
+        Set<RoomParticipant> participants = new HashSet<>();
+        for (UUID participantId : roomData.getParticipants()) {
+            User user = userRepository.findById(participantId)
+                    .orElseThrow(() -> new ApiException("USER_NOT_FOUND", "User not found with ID: " + participantId));
+            RoomParticipant participant = new RoomParticipant();
+            participant.setUser(user);
+            participant.setRoom(room);
+            participants.add(participant);
+        }
+        room.setParticipants(participants);
+
+        return new RoomResponse(roomRepository.save(room));
+    }
+
 
 }
