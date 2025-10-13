@@ -82,29 +82,52 @@ public class RoomService {
     }
 
     public RoomResponse updateRoom(UpdateRoomData roomData, UUID roomId) {
-        if (roomData.getId().isEmpty()) roomData.setId(roomId);
 
         List<String> errors = validateRoom(roomData);
         if (!errors.isEmpty()) throw new ApiException("ROOM_VALIDATION_ERROR", errors.toString());
 
-        Room room = roomRepository.findById(roomId)
-                .orElseThrow(() -> new ApiException("ROOM_NOT_FOUND", "Room not found with ID: " + roomId));
+        Room room = roomRepository.findById(roomId).orElseThrow(() -> new ApiException("ROOM_NOT_FOUND", "Room not found with ID: " + roomId));
 
         room.setName(roomData.getName());
         room.setType(roomData.getType());
 
-        Set<RoomParticipant> participants = new HashSet<>();
-        for (UUID participantId : roomData.getParticipants()) {
-            User user = userRepository.findById(participantId)
-                    .orElseThrow(() -> new ApiException("USER_NOT_FOUND", "User not found with ID: " + participantId));
-            RoomParticipant participant = new RoomParticipant();
-            participant.setUser(user);
-            participant.setRoom(room);
-            participants.add(participant);
-        }
-        room.setParticipants(participants);
 
-        return new RoomResponse(roomRepository.save(room));
+        Set<UUID> newParticipantIds = new HashSet<>(roomData.getParticipants());
+        Set<UUID> existingParticipantIds = new HashSet<>();
+
+        for (RoomParticipant rp : room.getParticipants()) {
+            existingParticipantIds.add(rp.getUser().getId());
+        }
+
+        Set<UUID> toAdd = new HashSet<>(newParticipantIds);
+        toAdd.removeAll(existingParticipantIds);
+
+        Set<UUID> toRemove = new HashSet<>(existingParticipantIds);
+        toRemove.removeAll(newParticipantIds);
+
+        if (!toRemove.isEmpty()) {
+            room.getParticipants().removeIf(rp -> toRemove.contains(rp.getUser().getId()));
+        }
+
+        if (!toAdd.isEmpty()) {
+            List<User> newUsers = userRepository.findAllById(toAdd);
+            logger.info("new Users {}", newUsers);
+
+            if (newUsers.size() != toAdd.size()) {
+                throw new ApiException("USER_NOT_FOUND", "Some participant IDs were not found in database");
+            }
+
+            for (User user : newUsers) {
+                RoomParticipant participant = new RoomParticipant();
+                participant.setUser(user);
+                participant.setRoom(room);
+                room.getParticipants().add(participant);
+            }
+        }
+
+
+        Room updatedRoom = roomRepository.save(room);
+        return new RoomResponse(updatedRoom);
     }
 
 
