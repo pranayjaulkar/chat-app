@@ -1,7 +1,7 @@
-import type { Chat } from "@/types/chat";
+import type { Room } from "@/types/room";
 import { User } from "lucide-react";
 
-export default function ChatListRow({ chat }: { chat: Chat }) {
+export default function ChatListRow({ chat }: { chat: Room }) {
   return (
     <div className="flex items-center py-1.5 px-4 border-b border-b-zinc-800 hover:bg-zinc-700 cursor-pointer">
       <div className="pr-4 flex items-center h-full">

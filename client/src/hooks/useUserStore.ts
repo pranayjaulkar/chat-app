@@ -2,13 +2,8 @@ import type { User } from "@/types/user";
 import { create } from "zustand";
 
 type UserStore = {
-  user: User | Partial<UserStore> | null;
-  setUser: (
-    value:
-      | UserStore
-      | Partial<UserStore>
-      | ((state: UserStore) => UserStore | Partial<UserStore>)
-  ) => void;
+  user: User | Partial<User> | null;
+  setUser: (value: User | Partial<User> | ((state: UserStore) => UserStore | Partial<UserStore>)) => void;
 };
 
 export const useUserStore = create<UserStore>((set) => ({

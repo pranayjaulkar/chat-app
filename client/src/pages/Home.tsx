@@ -1,89 +1,17 @@
 import ChatListRow from "@/components/ChatListRow";
 import ChatView from "@/components/ChatView";
 import NewChatModal from "@/components/NewChatModal";
-import type { Chat } from "@/types/chat";
+import type { Room } from "@/types/room";
 import { Plus } from "lucide-react";
 import { useState } from "react";
 
 export default function Home() {
   const [isNewChatModalOpen, setIsNewChatModalOpen] = useState(true);
   const [newChatId, setNewChatId] = useState("");
-  const chats: Chat[] = [
-    {
-      user: {
-        name: "Pranay",
-        bio: "The journey of a thousand miles begins with a single step.",
-      },
-    },
+  const rooms: Room[] = [
     {
       user: {
         name: "Jayesh",
-        bio: "The journey of a thousand miles begins with a single step.",
-      },
-    },
-    {
-      user: {
-        name: "Pranay",
-        bio: "The journey of a thousand miles begins with a single step.",
-      },
-    },
-    {
-      user: {
-        name: "Pranay",
-        bio: "The journey of a thousand miles begins with a single step.",
-      },
-    },
-    {
-      user: {
-        name: "Pranay",
-        bio: "The journey of a thousand miles begins with a single step.",
-      },
-    },
-    {
-      user: {
-        name: "Pranay",
-        bio: "The journey of a thousand miles begins with a single step.",
-      },
-    },
-    {
-      user: {
-        name: "Pranay",
-        bio: "The journey of a thousand miles begins with a single step.",
-      },
-    },
-    {
-      user: {
-        name: "Pranay",
-        bio: "The journey of a thousand miles begins with a single step.",
-      },
-    },
-    {
-      user: {
-        name: "Pranay",
-        bio: "The journey of a thousand miles begins with a single step.",
-      },
-    },
-    {
-      user: {
-        name: "Pranay",
-        bio: "The journey of a thousand miles begins with a single step.",
-      },
-    },
-    {
-      user: {
-        name: "Pranay",
-        bio: "The journey of a thousand miles begins with a single step.",
-      },
-    },
-    {
-      user: {
-        name: "Pranay",
-        bio: "The journey of a thousand miles begins with a single step.",
-      },
-    },
-    {
-      user: {
-        name: "Pranay",
         bio: "The journey of a thousand miles begins with a single step.",
       },
     },
@@ -123,8 +51,8 @@ export default function Home() {
         </div>
 
         <div className="flex flex-col space-y-1 flex-grow overflow-y-auto">
-          {chats.map((chat, i) => (
-            <ChatListRow chat={chat} key={i} />
+          {rooms.map((room, i) => (
+            <ChatListRow chat={room} key={i} />
           ))}
         </div>
       </div>

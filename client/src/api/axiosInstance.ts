@@ -1,6 +1,7 @@
+import { API_PATH } from "@/utils/constants";
 import axios from "axios";
 
 export const api = axios.create({
-  baseURL: import.meta.env.PROD ? "/api" : "http://localhost:8080/api",
+  baseURL: API_PATH,
   withCredentials: true,
 });

@@ -1,8 +1,16 @@
+export type ErrorCode =
+  | "UNKNOWN_ERROR"
+  | "USER_NOT_FOUND"
+  | "USER_ALREADY_EXISTS"
+  | "USER_VALIDATION_ERRORS"
+  | "ROOM_NOT_FOUND"
+  | "ROOM_VALIDATION_ERROR";
+
 export type ErrorResponse = {
   timestamp: string;
   error: string;
   message: string;
-  errorCode: string;
+  errorCode: ErrorCode;
   status: number;
 };
 
